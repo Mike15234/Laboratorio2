@@ -26,7 +26,7 @@ namespace Laboratorio2_EDD2.Controllers
             return View();
         }
 
-
+        //ZIGZAG
         [HttpPost]
         public ActionResult SubirArchivo(HttpPostedFileBase file, int llave)
         {
@@ -67,7 +67,6 @@ namespace Laboratorio2_EDD2.Controllers
             }
             return View(lst);
         }
-
         public ActionResult DownloadFile(string filename)
         {
             if (Path.GetExtension(filename) == ".huff" || Path.GetExtension(filename) == ".txt" || Path.GetExtension(filename) == ".LZW")
@@ -81,19 +80,19 @@ namespace Laboratorio2_EDD2.Controllers
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
             }
         }
-
+        
+        //VISTA ERROR
         public ActionResult error()
         {
             return View();
         }
-
+        
+        //CESAR
         public ActionResult Cesar()
         {
 
             return View();
         }
-
-
         [HttpPost]
         public ActionResult Cesar(HttpPostedFileBase file, string llave)
         {
@@ -147,14 +146,11 @@ namespace Laboratorio2_EDD2.Controllers
             
             return View();
         }
-
         public ActionResult CesarDescifrado()
         {
 
             return View();
         }
-
-
         [HttpPost]
         public ActionResult CesarDescifrado(HttpPostedFileBase file, string llave)
         {
@@ -209,7 +205,53 @@ namespace Laboratorio2_EDD2.Controllers
             return View();
         }
 
+        //ESPIRAL
+        public ActionResult CifrarEspirarl()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public ActionResult CifrarEspiral(HttpPostedFileBase file, int m, string llenado)
+        {
+            SubirArchivo recibirkey = new SubirArchivo();
+            int verificarM;
+            recibirkey.m = m;
+            var fileName = Path.GetFileName(file.FileName);
+            file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));
+            string filePath = string.Empty;
+
+            if (llenado == "horizontal")
+            {
+                verificarM = 0;
+            }
+            else if(llenado == "Vertical")
+            {
+                verificarM = 1;
+            }
+            else
+            {
+                //mmm escriba bien xfa
+                return View("error");
+            }
+            if (file != null)
+            {
+                string NuevaRuta = "";
+                string path = Server.MapPath("~/Uploads");
+                string[] Direccion = path.Split('\\');
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                for (var i = 0; i < Direccion.Length; i++)
+                {
+                    NuevaRuta += Direccion[i] + "/";
+                }
+                filePath = NuevaRuta + Path.GetFileName(file.FileName);
+            }
+            
+            return View();
+        }
 
 
         // GET: IngresoData/Details/5
