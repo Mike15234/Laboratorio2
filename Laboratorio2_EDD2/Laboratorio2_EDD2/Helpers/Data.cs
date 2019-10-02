@@ -6,6 +6,7 @@ using System.Web;
 using Laboratorio2_EDD2.Controllers;
 using Laboratorio2_EDD2.ZigZag;
 using Laboratorio2_EDD2.Cesar;
+using Laboratorio2_EDD2.Espiral;
 namespace Laboratorio2_EDD2.Helpers
 {
     public class Data
@@ -27,7 +28,7 @@ namespace Laboratorio2_EDD2.Helpers
 
 
         const int bufferLength = 1000000;
-        public void LecturaArchivo(string ruta, string nombre, int llave,string clave) //LEE EL ARCHIVO
+        public void LecturaArchivo(string ruta, string nombre, int llave,string clave, int llenado) //LEE EL ARCHIVO
         {
             if ((llave != 0)&&(clave==""))
             {
@@ -67,7 +68,7 @@ namespace Laboratorio2_EDD2.Helpers
                     }
                 }
             }
-            //CIFRADO LLAVE=0
+            //CIFRADO CESAR LLAVE=0
             else if ((clave != "")&&(llave==0))
             {
                 CifrarCesar Cesar = new CifrarCesar();
@@ -106,7 +107,7 @@ namespace Laboratorio2_EDD2.Helpers
                     }
                 }
             }
-            //DESCIFRADO LLAVE=1
+            //DESCIFRADO CESAR LLAVE=1
             else if ((clave != "") && (llave == 1))
             {
                 CifrarCesar Cesar = new CifrarCesar();
@@ -144,6 +145,46 @@ namespace Laboratorio2_EDD2.Helpers
 
                     }
                 }
+            }
+            else if (llenado != 0)
+            {
+                RutaEspiral Espiral = new RutaEspiral();
+
+                using (var stream = new FileStream(ruta, FileMode.Open))
+                {
+                    using (var reader = new BinaryReader(stream))
+                    {
+                        var byteBuffer = new byte[bufferLength];
+                        while (reader.BaseStream.Position != reader.BaseStream.Length)
+                        {
+                            byteBuffer = reader.ReadBytes(bufferLength);
+                        }
+                        string letters = System.Text.Encoding.ASCII.GetString(byteBuffer);
+                        string cifrado = Espiral.cifrarEspiral(letters, llave,llenado); //mandar llave
+                        string[] nuevo = ruta.Split('.');
+                        nuevo[0] += "espiral.cif";
+                        //EN TEORIA ESCRIBE EN BYTES
+                        if (!File.Exists(nuevo[0]))
+                        {
+
+                            using (var writeStream1 = new FileStream(nuevo[0], FileMode.OpenOrCreate))
+                            {
+                                using (var writer = new BinaryWriter(writeStream1))
+                                {
+                                    foreach (var item in cifrado)
+                                    {
+                                        writer.Write(item);
+                                    }
+                                    writer.Close();
+                                }
+                                writeStream1.Close();
+
+                            }
+                        }
+
+                    }
+                }
+
             }
         }
     }

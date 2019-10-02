@@ -7,43 +7,69 @@ namespace Laboratorio2_EDD2.Espiral
 {
     public class RutaEspiral
     {
-        public string cifrarEspiral(string texto, int m)
+        public string cifrarEspiral(string texto, int m,int recorrido)
         {
             int n = texto.Length / m;
-
             string[,] matriz = new string[m, n];
-            //llenado horizontal
-            for (var i = 0; i<m; i++)
+            int aux = 1;
+            if (recorrido==1)
             {
-                for (var j = 0; j < n ; j++)
+                for ( var fila = 0; fila < m; fila++)
                 {
-                    matriz[i, j] = texto.Substring(i, 1);
+                    for (var columna = 0; columna < n; columna++)
+                    {
+                        matriz[fila, columna] = texto.Substring(fila, 1);
+                    }
                 }
-            }
 
-            //llenado vertical
-            for (int i = 0; i < m; i++)
+            }//llenado horizontal
+            else
             {
-                
-                for (int j = 0;j < n; j++)
+                for (int fila = 0; fila < m; fila++)
                 {
-                    matriz[j,i] = texto.Substring(i, 1);
-                }
-            }
 
+                    for (int co = 0; co < n; co++)
+                    {
+                        matriz[co, fila] = texto.Substring(fila, 1);
+                    }
+                }
+            }//llenado vertical
+            int inicio = 0;
+            int limitefila = m;
+            int limitecolumna = n;
+            string cifrado=string.Empty;
+            int j, i=0;
             //Recorrer en espiral
-
-
-            //escribir
-            for (var i = 0; i < m; i++)
+            while (aux <= texto.Length)
             {
-                for (int j = 0; j < n; j++)
+                for (j = inicio; j < m; j++)
                 {
-                    matriz[m, n].ToString();
+                    cifrado+=matriz[i,j];
+                    aux++;
                 }
+                for (i = inicio + 1; i < limitefila; i++)
+                {
+                    cifrado+=matriz[i, j - 1];
+                    aux++;
+                }
+                for (j = limitecolumna - 1; j > inicio; j--)
+                {
+                    cifrado += matriz[i - 1, j - 1];
+                    aux++;
+                }
+                for (i = limitefila - 1; i > inicio + 1; i--)
+                {
+                    cifrado+=matriz[i - 1,j];
+                    aux++;
+                }
+                inicio++;
+                limitecolumna--;
+                limitefila--;
             }
 
-            return "";
+            
+
+            return cifrado;
         }
     }
 }

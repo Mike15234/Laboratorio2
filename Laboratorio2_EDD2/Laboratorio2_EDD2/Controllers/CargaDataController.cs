@@ -17,9 +17,7 @@ namespace Laboratorio2_EDD2.Controllers
         {
             return View();
         }
-
         //
-
         public ActionResult SubirArchivo()
         {
 
@@ -50,7 +48,7 @@ namespace Laboratorio2_EDD2.Controllers
                 }
                 filePath = NuevaRuta + Path.GetFileName(file.FileName);
             }
-            Data.Instancia.LecturaArchivo(filePath, fileName, llave, "");
+            Data.Instancia.LecturaArchivo(filePath, fileName, llave, "",0);
             return View();
         }
 
@@ -86,7 +84,6 @@ namespace Laboratorio2_EDD2.Controllers
         {
             return View();
         }
-        
         //CESAR
         public ActionResult Cesar()
         {
@@ -134,7 +131,7 @@ namespace Laboratorio2_EDD2.Controllers
                     }
                     filePath = NuevaRuta + Path.GetFileName(file.FileName);
                 }
-                Data.Instancia.LecturaArchivo(filePath, fileName, 0,llave);
+                Data.Instancia.LecturaArchivo(filePath, fileName, 0,llave,0);
 
             }
             else
@@ -146,6 +143,7 @@ namespace Laboratorio2_EDD2.Controllers
             
             return View();
         }
+
         public ActionResult CesarDescifrado()
         {
 
@@ -192,7 +190,7 @@ namespace Laboratorio2_EDD2.Controllers
                     }
                     filePath = NuevaRuta + Path.GetFileName(file.FileName);
                 }
-                Data.Instancia.LecturaArchivo(filePath, fileName, 1, llave);
+                Data.Instancia.LecturaArchivo(filePath, fileName, 1, llave,0);
 
             }
             else
@@ -221,19 +219,19 @@ namespace Laboratorio2_EDD2.Controllers
             file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));
             string filePath = string.Empty;
 
-            if (llenado == "horizontal")
+            if (llenado.ToUpper() == "HORIZONTAL")
             {
                 verificarM = 0;
             }
-            else if(llenado == "Vertical")
+            else if(llenado.ToUpper() == "VERTICAL")
             {
                 verificarM = 1;
             }
             else
             {
-                //mmm escriba bien xfa
                 return View("error");
-            }
+            } //mmm escriba bien xfa
+
             if (file != null)
             {
                 string NuevaRuta = "";
@@ -249,7 +247,10 @@ namespace Laboratorio2_EDD2.Controllers
                 }
                 filePath = NuevaRuta + Path.GetFileName(file.FileName);
             }
-            
+
+            Data.Instancia.LecturaArchivo(filePath, fileName, m, "",verificarM);
+
+
             return View();
         }
 
