@@ -1,22 +1,25 @@
 ﻿
 @{
-    ViewBag.Title = "CifrarEspiral";
+    ViewBag.Title = "CifrarEspirarl";
 }
 
-<h2>CifrarEspiral</h2>
+<h2>CifrarEspirarl</h2>
+
+<h2>SubirArchivo</h2>
 <form method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
     <br />
-    Llave <input type="text" name="llave"><br>
+    Llenado(vertical u Horizontal) <input type="text" name=" llenado" />
     <br />
-    Recorrido <input type="text" name="llave"><br>
-    <h1>(Este puede ser "Horizontal" o "Vertical"</h1>
+    Llave <input type="text" name="m"><br>
     <br />
     <button type="submit">Subir</button>
 </form>
 
 
 @Html.ActionLink(" Ir a Descargas", "Donwload")
+<br />
 @Html.ActionLink("Cifrado Zig Zag", "SubirArchivo")
+<br />
 @Html.ActionLink("Decifrar con Cesar", "CesarDecifrado")
 

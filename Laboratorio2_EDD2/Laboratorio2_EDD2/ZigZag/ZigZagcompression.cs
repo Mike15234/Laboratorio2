@@ -10,34 +10,37 @@ namespace Laboratorio2_EDD2.ZigZag
     {
         public string ZigZag(string textoCompleto, int llave)
         {
-            string valor = string.Empty;
-            string[] Validos = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", ".", "'", "/", "-", "Ü", " " ,"!","$"};
-            foreach (char a in textoCompleto.ToArray())
-            {
-                if (!textoCompleto.ToArray().Contains(a))
-                {
-                    valor = a.ToString();
-                    break;
-                }
-            }
             int zz = 0;
             int fila = 0;
             int columna = 0;
-            string[,] zigzag = new string[llave, textoCompleto.Length];
+            int P1 = 2 * (llave) - 1;
+            int V1 = 2;
+            int V2 = 1;
+            int Lmax = 0;
 
-            string caracter=string.Empty;
-            for (int i = 0; i < textoCompleto.Length; i++)
+            while (Lmax<textoCompleto.Length && P1 <textoCompleto.Length)
             {
-                if (textoCompleto.Substring(i,1)==null)
+                Lmax = P1 * V1 - V2;
+                V1 += 1;
+                V2 += 1;
+            }
+
+            if (P1 > Lmax)
+            {
+                Lmax = P1;
+            }
+            string[,] zigzag = new string[llave, Lmax];
+            for (int i = 0; i < Lmax; i++)
+            {
+                if (i<textoCompleto.Length)
                 {
-                    caracter= valor;
+                    zigzag[fila, columna] = textoCompleto.Substring(i, 1);
                 }
                 else
                 {
-                    caracter = textoCompleto.Substring(i, 1);
+                    zigzag[fila, columna] = "$";
                 }
-                ////
-                zigzag[fila, columna] = textoCompleto.Substring(i, 1);
+               
                 columna = columna + 1;
                 if (fila== llave-1)
                 {
@@ -64,17 +67,66 @@ namespace Laboratorio2_EDD2.ZigZag
                     fila -= 1;
                 }
             }
-            /////
+            ///// escribe el cifrado
             string cifrado = string.Empty;
             for (var i = 0; i < llave; i++)
             {
-                for (var j = 0; j < textoCompleto.Length; j++)
+                for (var j = 0; j < Lmax; j++)
                 {
                     cifrado += zigzag[i, j];
                 }
             }
             return cifrado;
         }
+
+        public string Decifrarzigzag(string textoCifrado, int llave)
+        {
+            string[,] zigzagDecifrar= new string[llave, textoCifrado.Length];
+
+            int m = ((textoCifrado.Length-3)/((2*llave)-2));
+            string nivel1 = textoCifrado.Substring(0, m);
+            string medios = textoCifrado.Substring((m + 1), (textoCifrado.Length - (m - 1) - 1));
+            string ultimoNivel = textoCifrado.Substring(textoCifrado.Length-(m - 1),textoCifrado.Length);
+            
+            string[,] Arreglomedios = new string[2 * (m - 1), medios.Length / (2 * (m - 1))];
+            for (var i = 0; i < (2 * (m - 1)); i++)
+            {
+                for (var j = 0; j < (medios.Length / (2 * (m - 1))); j++)
+                {
+                    Arreglomedios[i, j] = medios.Substring(0, 1);
+                    medios.Remove(0, 1);
+                }
+            }
+
+            int filita=0;
+
+            string nuevo = string.Empty;
+            for (var i = 0; i < textoCifrado.Length; i++)
+            {
+                nuevo += nivel1.Substring(0, 1);
+                nivel1.Remove(0, 1);
+
+                for (var j = 0; j < 2*(m-1); j++)
+                {
+                    nuevo += Arreglomedios[filita, j];
+                }
+
+                filita++;
+                nuevo += ultimoNivel.Substring(0, 1);
+                ultimoNivel.Remove(0, 1);
+
+                for (var j = (2 * (m - 1)); j ==0 ; j++)
+                {
+                    nuevo += Arreglomedios[filita, j];
+                }
+                filita++;
+            }
+
+            return nuevo;
+        }
+
+
+
 
     }
 }

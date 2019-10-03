@@ -173,8 +173,8 @@
     <Content Include="Views\CargaData\Cesar.cshtml" />
     <Content Include="Views\CargaData\error.cshtml" />
     <Content Include="Views\CargaData\CesarDescifrado.cshtml" />
-    <Content Include="Views\CargaData\CifrarEspirarl.cshtml" />
     <Content Include="Views\CargaData\CifrarEspiral.cshtml" />
+    <Content Include="Views\CargaData\DecifrarZigZag.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

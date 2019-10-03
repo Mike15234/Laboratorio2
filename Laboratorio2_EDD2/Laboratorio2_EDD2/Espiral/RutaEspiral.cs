@@ -12,7 +12,7 @@ namespace Laboratorio2_EDD2.Espiral
             int n = texto.Length / m;
             string[,] matriz = new string[m, n];
             int aux = 1;
-            if (recorrido==1)
+            if (recorrido==2)
             {
                 for ( var fila = 0; fila < m; fila++)
                 {

@@ -52,6 +52,39 @@ namespace Laboratorio2_EDD2.Controllers
             return View();
         }
 
+        //DECIFRADO ZIGZAG
+        public ActionResult DecifrarZigZag()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DecifrarZigZag(HttpPostedFileBase file, int llave)
+        {
+            SubirArchivo recibirkey = new SubirArchivo();
+            recibirkey.llave = llave;
+            var fileName = Path.GetFileName(file.FileName);//Nombre del archivo a cargar
+            file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
+            string filePath = string.Empty;
+            if (file != null)
+            {
+                string NuevaRuta = "";
+                string path = Server.MapPath("~/Uploads");
+                string[] Direccion = path.Split('\\');
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                for (var i = 0; i < Direccion.Length; i++)
+                {
+                    NuevaRuta += Direccion[i] + "/";
+                }
+                filePath = NuevaRuta + Path.GetFileName(file.FileName);
+            }
+           Data.Instancia.LecturaArchivo(filePath, fileName, llave, "", 10);
+            return View();
+        }
+
+
         //DOWNLOAD
         public ActionResult Donwload()
         {
@@ -84,7 +117,8 @@ namespace Laboratorio2_EDD2.Controllers
         {
             return View();
         }
-        //CESAR
+
+        //CESAR CIFRADO
         public ActionResult Cesar()
         {
 
@@ -143,7 +177,7 @@ namespace Laboratorio2_EDD2.Controllers
             
             return View();
         }
-
+        //DECIFRADO CESAR
         public ActionResult CesarDescifrado()
         {
 
@@ -203,12 +237,11 @@ namespace Laboratorio2_EDD2.Controllers
             return View();
         }
 
-        //ESPIRAL
-        public ActionResult CifrarEspirarl()
+        //ESPIRAL CIFRADO
+        public ActionResult CifrarEspiral()
         {
             return View();
         }
-
         [HttpPost]
         public ActionResult CifrarEspiral(HttpPostedFileBase file, int m, string llenado)
         {
@@ -221,11 +254,11 @@ namespace Laboratorio2_EDD2.Controllers
 
             if (llenado.ToUpper() == "HORIZONTAL")
             {
-                verificarM = 0;
+                verificarM = 1;
             }
             else if(llenado.ToUpper() == "VERTICAL")
             {
-                verificarM = 1;
+                verificarM = 2;
             }
             else
             {
