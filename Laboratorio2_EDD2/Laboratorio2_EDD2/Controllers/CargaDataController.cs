@@ -48,7 +48,7 @@ namespace Laboratorio2_EDD2.Controllers
                 }
                 filePath = NuevaRuta + Path.GetFileName(file.FileName);
             }
-            Data.Instancia.LecturaArchivo(filePath, fileName, llave, "",0);
+            Data.Instancia.LecturaArchivo(filePath, fileName, llave, "",1000);
             return View();
         }
 
@@ -80,7 +80,7 @@ namespace Laboratorio2_EDD2.Controllers
                 }
                 filePath = NuevaRuta + Path.GetFileName(file.FileName);
             }
-           Data.Instancia.LecturaArchivo(filePath, fileName, llave, "", 10);
+           Data.Instancia.LecturaArchivo(filePath, fileName, llave, "", 100);
             return View();
         }
 
@@ -128,6 +128,7 @@ namespace Laboratorio2_EDD2.Controllers
         public ActionResult Cesar(HttpPostedFileBase file, string llave)
         {
             SubirArchivo recibirkey = new SubirArchivo();
+
             recibirkey.clave = llave;
             char[] verificar = llave.ToCharArray();
             bool repetido = false;
@@ -148,7 +149,7 @@ namespace Laboratorio2_EDD2.Controllers
             if (!repetido)
             {
                 var fileName = Path.GetFileName(file.FileName);//Nombre del archivo a cargar
-                file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
+                file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));
                 string filePath = string.Empty;
                 if (file != null)
                 {
@@ -248,15 +249,16 @@ namespace Laboratorio2_EDD2.Controllers
             SubirArchivo recibirkey = new SubirArchivo();
             int verificarM;
             recibirkey.m = m;
+            recibirkey.llenado = llenado;
             var fileName = Path.GetFileName(file.FileName);
             file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));
             string filePath = string.Empty;
 
-            if (llenado.ToUpper() == "HORIZONTAL")
+            if (llenado == "H")
             {
                 verificarM = 1;
             }
-            else if(llenado.ToUpper() == "VERTICAL")
+            else if(llenado == "V")
             {
                 verificarM = 2;
             }
@@ -282,8 +284,6 @@ namespace Laboratorio2_EDD2.Controllers
             }
 
             Data.Instancia.LecturaArchivo(filePath, fileName, m, "",verificarM);
-
-
             return View();
         }
 

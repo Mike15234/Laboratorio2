@@ -81,48 +81,94 @@ namespace Laboratorio2_EDD2.ZigZag
 
         public string Decifrarzigzag(string textoCifrado, int llave)
         {
-            string[,] zigzagDecifrar= new string[llave, textoCifrado.Length];
+            var key = Convert.ToDouble(llave);
+            var mm = Math.Ceiling(((2 * key) - 3 + textoCifrado.Length) / ((2 * key) - 2));
+            var m = Convert.ToInt32(mm);
 
-            int m = ((textoCifrado.Length-3)/((2*llave)-2));
+            string[] medios = new string[llave - 2];
+            var posicion = m;
+            string[,] Arreglomedios = new string[llave - 2, 2 * (m - 1)];
+
             string nivel1 = textoCifrado.Substring(0, m);
-            string medios = textoCifrado.Substring((m + 1), (textoCifrado.Length - (m - 1) - 1));
-            string ultimoNivel = textoCifrado.Substring(textoCifrado.Length-(m - 1),textoCifrado.Length);
+
+            for (int i = 0; i < llave - 2; i++)
+            {
+                medios[i] = Convert.ToString(textoCifrado.Substring((posicion), (2 * (m - 1)))).PadRight(2 * (m - 1), '%');
+                posicion += (2 * (m - 1));
+                var charArray = medios[i].ToCharArray();
+                for (int j = 0; j < 2 * (m - 1); j++)
+                {
+                    Arreglomedios[i, j] = Convert.ToString(charArray[j]);
+                }
+
+            }
+
+            string ultimoNivel = textoCifrado.Substring((textoCifrado.Length - m +1), m-1);
+            int filita=0; 
+            var nuevo = string.Empty;
+
+            var contador = 0;
+            var k = 0;
+
+            while(contador < textoCifrado.Length)
+            {
+                if (nuevo.Length == textoCifrado.Length)
+                {
+                    break;
+                }
+                if (nivel1.Substring(k, 1) == "$")
+                {
+                    
+                }else
+                {
+                    nuevo += nivel1.Substring(k, 1);
+                }
+                contador++;
+                for (var j = 0; j < llave - 2; j++)
+                {
+                    if (nuevo.Length == textoCifrado.Length)
+                    {
+                        break;
+                    }
+                    if (nivel1.Substring(k, 1) != "$")
+                    {
+                        nuevo += Arreglomedios[j, filita];
+                    }
+                    contador++;
+                    
+                }
+                filita++;
+                if (nuevo.Length == textoCifrado.Length)
+                {
+                    break;
+                }
+                if (nivel1.Substring(k, 1) != "$")
+                {
+                    nuevo += ultimoNivel.Substring(k, 1);
+                }
+                
+                
+                contador++;
+                for (int j = llave - 3; j >= 0; j--)
+                {
+                    if (nuevo.Length == textoCifrado.Length)
+                    {
+                        break;
+                    }
+                    if (nivel1.Substring(k, 1) != "$")
+                    {
+                        nuevo += Arreglomedios[j, filita];
+                    }
+                    contador++;
+                    
+                }//hay que rellenar lo demas de la matriz
+                filita++;
+                k++;
+            }
             
-            string[,] Arreglomedios = new string[2 * (m - 1), medios.Length / (2 * (m - 1))];
-            for (var i = 0; i < (2 * (m - 1)); i++)
-            {
-                for (var j = 0; j < (medios.Length / (2 * (m - 1))); j++)
-                {
-                    Arreglomedios[i, j] = medios.Substring(0, 1);
-                    medios.Remove(0, 1);
-                }
-            }
-
-            int filita=0;
-
-            string nuevo = string.Empty;
-            for (var i = 0; i < textoCifrado.Length; i++)
-            {
-                nuevo += nivel1.Substring(0, 1);
-                nivel1.Remove(0, 1);
-
-                for (var j = 0; j < 2*(m-1); j++)
-                {
-                    nuevo += Arreglomedios[filita, j];
-                }
-
-                filita++;
-                nuevo += ultimoNivel.Substring(0, 1);
-                ultimoNivel.Remove(0, 1);
-
-                for (var j = (2 * (m - 1)); j ==0 ; j++)
-                {
-                    nuevo += Arreglomedios[filita, j];
-                }
-                filita++;
-            }
-
             return nuevo;
+           
+
         }
 
 

@@ -29,7 +29,7 @@ namespace Laboratorio2_EDD2.Helpers
 
         public void LecturaArchivo(string ruta, string nombre, int llave,string clave, int llenado) //LEE EL ARCHIVO
         {
-            if ((llave!=0)&&(llenado==10))
+            if ((llave!=0)&&(llenado==100))
             {
                 ZigZagcompression zigzagg = new ZigZagcompression();
                 using (var stream = new FileStream(ruta, FileMode.Open))
@@ -68,7 +68,7 @@ namespace Laboratorio2_EDD2.Helpers
                 }
 
             }
-            else if ((llave != 0)&&(clave=="")&&(llenado!=10))
+            else if ((llave != 0)&&(clave=="")&&(llenado==1000))
             {
                 ZigZagcompression zigzagg = new ZigZagcompression();
                 using (var stream = new FileStream(ruta, FileMode.Open))
@@ -197,10 +197,9 @@ namespace Laboratorio2_EDD2.Helpers
                             byteBuffer = reader.ReadBytes(bufferLength);
                         }
                         string letters = System.Text.Encoding.ASCII.GetString(byteBuffer);
-                        string cifrado = Espiral.cifrarEspiral(letters, llave,llenado); //mandar llave
+                        string cifrado = Espiral.cifrarEspiral(letters,llave,llenado); //mandar llave
                         string[] nuevo = ruta.Split('.');
                         nuevo[0] += "espiral.cif";
-                        //EN TEORIA ESCRIBE EN BYTES
                         if (!File.Exists(nuevo[0]))
                         {
 

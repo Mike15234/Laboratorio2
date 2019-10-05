@@ -9,10 +9,10 @@ namespace Laboratorio2_EDD2.Espiral
     {
         public string cifrarEspiral(string texto, int m,int recorrido)
         {
-            int n = texto.Length / m;
-            string[,] matriz = new string[m, n];
+            decimal n = (texto.Length / m);
+            string[,] matriz = new string[m, Convert.ToInt64(n)];
             int aux = 1;
-            if (recorrido==2)
+            if (recorrido==2)//escritura de texto en horizonntal
             {
                 for ( var fila = 0; fila < m; fila++)
                 {
@@ -22,21 +22,22 @@ namespace Laboratorio2_EDD2.Espiral
                     }
                 }
 
-            }//llenado horizontal
-            else
+            }
+            else  //llenado vertical
             {
-                for (int fila = 0; fila < m; fila++)
+                for (var fila = 0; fila < m; fila++)
                 {
 
-                    for (int co = 0; co < n; co++)
+                    for (var co = 0; co < n; co++)
                     {
                         matriz[co, fila] = texto.Substring(fila, 1);
                     }
                 }
-            }//llenado vertical
+            }
+            int nmatriz = 0;
             int inicio = 0;
             int limitefila = m;
-            int limitecolumna = n;
+            int limitecolumna = nmatriz;
             string cifrado=string.Empty;
             int j, i=0;
             //Recorrer en espiral
