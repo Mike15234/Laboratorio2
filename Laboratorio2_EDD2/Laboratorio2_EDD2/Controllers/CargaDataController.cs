@@ -60,28 +60,37 @@ namespace Laboratorio2_EDD2.Controllers
         [HttpPost]
         public ActionResult DecifrarZigZag(HttpPostedFileBase file, int llave)
         {
-            SubirArchivo recibirkey = new SubirArchivo();
-            recibirkey.llave = llave;
-            var fileName = Path.GetFileName(file.FileName);//Nombre del archivo a cargar
-            file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
-            string filePath = string.Empty;
-            if (file != null)
+            var allowedExtensions = new string[] { ".cif" };
+            string extension = Path.GetExtension(file.FileName);
+            if (allowedExtensions.Contains(extension))
             {
-                string NuevaRuta = "";
-                string path = Server.MapPath("~/Uploads");
-                string[] Direccion = path.Split('\\');
-                if (!Directory.Exists(path))
+                SubirArchivo recibirkey = new SubirArchivo();
+                recibirkey.llave = llave;
+                var fileName = Path.GetFileName(file.FileName);//Nombre del archivo a cargar
+                file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
+                string filePath = string.Empty;
+                if (file != null)
                 {
-                    Directory.CreateDirectory(path);
+                    string NuevaRuta = "";
+                    string path = Server.MapPath("~/Uploads");
+                    string[] Direccion = path.Split('\\');
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    for (var i = 0; i < Direccion.Length; i++)
+                    {
+                        NuevaRuta += Direccion[i] + "/";
+                    }
+                    filePath = NuevaRuta + Path.GetFileName(file.FileName);
                 }
-                for (var i = 0; i < Direccion.Length; i++)
-                {
-                    NuevaRuta += Direccion[i] + "/";
-                }
-                filePath = NuevaRuta + Path.GetFileName(file.FileName);
+                Data.Instancia.LecturaArchivo(filePath, fileName, llave, "", 100);
+                return View();
             }
-           Data.Instancia.LecturaArchivo(filePath, fileName, llave, "", 100);
-            return View();
+            else
+            {
+                return View("error");
+            }
         }
 
 
@@ -181,57 +190,65 @@ namespace Laboratorio2_EDD2.Controllers
         [HttpPost]
         public ActionResult CesarDescifrado(HttpPostedFileBase file, string llave)
         {
-            SubirArchivo recibirkey = new SubirArchivo();
-            recibirkey.clave = llave;
-            char[] verificar = llave.ToCharArray();
-            bool repetido = false;
-            for (var i = 0; i < llave.Length; i++)
+            var allowedExtensions = new string[] { ".cif" };
+            string extension = Path.GetExtension(file.FileName);
+            if (allowedExtensions.Contains(extension))
             {
-                for (var j = 0; j < llave.Length; j++)
+                SubirArchivo recibirkey = new SubirArchivo();
+                recibirkey.clave = llave;
+                char[] verificar = llave.ToCharArray();
+                bool repetido = false;
+                for (var i = 0; i < llave.Length; i++)
                 {
-                    if (i != j)
+                    for (var j = 0; j < llave.Length; j++)
                     {
-                        if (verificar[i] == verificar[j])
+                        if (i != j)
                         {
-                            repetido = true;
+                            if (verificar[i] == verificar[j])
+                            {
+                                repetido = true;
+                            }
                         }
                     }
                 }
-            }
 
-            if (!repetido)
-            {
-                var fileName = Path.GetFileName(file.FileName);//Nombre del archivo a cargar
-                file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
-                string filePath = string.Empty;
-                if (file != null)
+                if (!repetido)
                 {
-                    string NuevaRuta = "";
-                    string path = Server.MapPath("~/Uploads");
-                    string[] Direccion = path.Split('\\');
-                    if (!Directory.Exists(path))
+                    var fileName = Path.GetFileName(file.FileName);//Nombre del archivo a cargar
+                    file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
+                    string filePath = string.Empty;
+                    if (file != null)
                     {
-                        Directory.CreateDirectory(path);
+                        string NuevaRuta = "";
+                        string path = Server.MapPath("~/Uploads");
+                        string[] Direccion = path.Split('\\');
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        for (var i = 0; i < Direccion.Length; i++)
+                        {
+                            NuevaRuta += Direccion[i] + "/";
+                        }
+                        filePath = NuevaRuta + Path.GetFileName(file.FileName);
                     }
-                    for (var i = 0; i < Direccion.Length; i++)
-                    {
-                        NuevaRuta += Direccion[i] + "/";
-                    }
-                    filePath = NuevaRuta + Path.GetFileName(file.FileName);
-                }
-                Data.Instancia.LecturaArchivo(filePath, fileName, 1, llave,0);
+                    Data.Instancia.LecturaArchivo(filePath, fileName, 1, llave, 0);
 
+                }
+                else
+                {
+
+                    return View("error");
+
+                }
+
+                return View();
             }
             else
             {
-
                 return View("error");
-
             }
-
-            return View();
         }
-
         //ESPIRAL CIFRADO
         public ActionResult CifrarEspiral()
         {
@@ -282,11 +299,7 @@ namespace Laboratorio2_EDD2.Controllers
         }
 
 
-        // GET: IngresoData/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        
 
         // GET: IngresoData/Create
         public ActionResult Create()
