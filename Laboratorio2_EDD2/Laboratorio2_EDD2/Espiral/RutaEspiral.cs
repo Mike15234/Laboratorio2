@@ -12,8 +12,7 @@ namespace Laboratorio2_EDD2.Espiral
             decimal n = (texto.Length / m);
             string[,] matriz = new string[m, Convert.ToInt64(n)];
             int aux = 1;
-            if (recorrido==2)//escritura de texto en horizonntal
-            {
+           //llenado es horizontal
                 for ( var fila = 0; fila < m; fila++)
                 {
                     for (var columna = 0; columna < n; columna++)
@@ -21,26 +20,13 @@ namespace Laboratorio2_EDD2.Espiral
                         matriz[fila, columna] = texto.Substring(fila, 1);
                     }
                 }
-
-            }
-            else  //llenado vertical
-            {
-                for (var fila = 0; fila < m; fila++)
-                {
-
-                    for (var co = 0; co < n; co++)
-                    {
-                        matriz[co, fila] = texto.Substring(fila, 1);
-                    }
-                }
-            }
+            
             int nmatriz = 0;
             int inicio = 0;
             int limitefila = m;
             int limitecolumna = nmatriz;
             string cifrado=string.Empty;
             int j, i=0;
-            //Recorrer en espiral
             while (aux <= texto.Length)
             {
                 for (j = inicio; j < m; j++)

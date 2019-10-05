@@ -100,16 +100,10 @@ namespace Laboratorio2_EDD2.Controllers
         }
         public ActionResult DownloadFile(string filename)
         {
-            if (Path.GetExtension(filename) == ".huff" || Path.GetExtension(filename) == ".txt" || Path.GetExtension(filename) == ".LZW")
-            {
-                string fullpath = Path.Combine(Server.MapPath("~/Uploads"), filename);
-                return File(fullpath, "LZW/huff");
 
-            }
-            else
-            {
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
-            }
+            var path = AppDomain.CurrentDomain.BaseDirectory + "Uploads/";
+            var bytesDoc = System.IO.File.ReadAllBytes(path + filename);
+            return File(bytesDoc, System.Net.Mime.MediaTypeNames.Application.Octet, filename);  
         }
         
         //VISTA ERROR

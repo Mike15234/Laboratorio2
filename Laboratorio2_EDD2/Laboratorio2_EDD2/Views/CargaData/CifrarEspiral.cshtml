@@ -10,9 +10,9 @@
 <form method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
     <br />
-    Llenado<input type="text" name="llenado" />
+    Cifrado (Horizontal (H), vertical (V) )<input type="text" name="llenado" />
     <br />
-    Llave <input type="number" name="m"><br>
+    m <input type="number" name="m"><br>
     <br />
     <button type="submit">Subir</button>
 </form>
@@ -22,5 +22,8 @@
 <br />
 @Html.ActionLink("Cifrado Zig Zag", "SubirArchivo")
 <br />
-@Html.ActionLink("Decifrar con Cesar", "CesarDecifrado")
-
+@Html.ActionLink("Decifrar con ZigZag", "DecifrarZigZag")
+<br />
+@Html.ActionLink("Cifrado por césar", "Cesar")
+<br />
+@Html.ActionLink("Decifrar con Cesar", "CesarDescifrado")
