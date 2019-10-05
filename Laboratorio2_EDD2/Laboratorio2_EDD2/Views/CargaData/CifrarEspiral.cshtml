@@ -1,14 +1,18 @@
 ﻿
 @{
-    ViewBag.Title = "Cesar";
+    ViewBag.Title = "CifrarEspirarl";
 }
 
+<h2>CifrarEspirarl</h2>
 
-<h2>Cesar</h2>
+
+
 <form method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
     <br />
-    Llave <input type="text" name="llave"><br>
+    Cifrado (Horizontal (H), vertical (V) )<input type="text" name="llenado" />
+    <br />
+    m <input type="number" name="m"><br>
     <br />
     <button type="submit">Subir</button>
 </form>
@@ -20,6 +24,6 @@
 <br />
 @Html.ActionLink("Decifrar con ZigZag", "DecifrarZigZag")
 <br />
-@Html.ActionLink("Decifrar con Cesar", "CesarDescifrado")
+@Html.ActionLink("Cifrado por césar", "Cesar")
 <br />
-@Html.ActionLink("Cifrado Espiral", "CifrarEspiral")
+@Html.ActionLink("Decifrar con Cesar", "CesarDescifrado")

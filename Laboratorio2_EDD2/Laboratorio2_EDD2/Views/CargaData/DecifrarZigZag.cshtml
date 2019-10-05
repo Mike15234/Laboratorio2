@@ -1,9 +1,10 @@
 ﻿
 @{
-    ViewBag.Title = "ZigZag";
+    ViewBag.Title = "DecifrarZigZag";
 }
 
-<h2>SubirArchivo</h2>
+<h2>DecifrarZigZag</h2>
+
 <form method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
     <br />
@@ -12,12 +13,10 @@
     <button type="submit">Subir</button>
 </form>
 
-@Html.ActionLink("Decifrar con ZigZag", "DecifrarZigZag")
+@Html.ActionLink("Cifrar con ZigZag", "SubirArchivo")
 <br />
 @Html.ActionLink("Ir a Descargas", "Donwload")
 <br />
 @Html.ActionLink("Cifrado por césar", "Cesar")
 <br />
 @Html.ActionLink("Decifrar con Cesar", "CesarDescifrado")
-<br />
-@Html.ActionLink("Cifrado Espiral", "CifrarEspiral")

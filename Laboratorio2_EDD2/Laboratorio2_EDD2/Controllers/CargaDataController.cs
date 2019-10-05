@@ -17,16 +17,14 @@ namespace Laboratorio2_EDD2.Controllers
         {
             return View();
         }
-
         //
-
         public ActionResult SubirArchivo()
         {
 
             return View();
         }
 
-
+        //ZIGZAG
         [HttpPost]
         public ActionResult SubirArchivo(HttpPostedFileBase file, int llave)
         {
@@ -50,9 +48,51 @@ namespace Laboratorio2_EDD2.Controllers
                 }
                 filePath = NuevaRuta + Path.GetFileName(file.FileName);
             }
-            Data.Instancia.LecturaArchivo(filePath, fileName, llave, "");
+            Data.Instancia.LecturaArchivo(filePath, fileName, llave, "",1000);
             return View();
         }
+
+        //DECIFRADO ZIGZAG
+        public ActionResult DecifrarZigZag()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DecifrarZigZag(HttpPostedFileBase file, int llave)
+        {
+            var allowedExtensions = new string[] { ".cif" };
+            string extension = Path.GetExtension(file.FileName);
+            if (allowedExtensions.Contains(extension))
+            {
+                SubirArchivo recibirkey = new SubirArchivo();
+                recibirkey.llave = llave;
+                var fileName = Path.GetFileName(file.FileName);//Nombre del archivo a cargar
+                file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
+                string filePath = string.Empty;
+                if (file != null)
+                {
+                    string NuevaRuta = "";
+                    string path = Server.MapPath("~/Uploads");
+                    string[] Direccion = path.Split('\\');
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    for (var i = 0; i < Direccion.Length; i++)
+                    {
+                        NuevaRuta += Direccion[i] + "/";
+                    }
+                    filePath = NuevaRuta + Path.GetFileName(file.FileName);
+                }
+                Data.Instancia.LecturaArchivo(filePath, fileName, llave, "", 100);
+                return View();
+            }
+            else
+            {
+                return View("error");
+            }
+        }
+
 
         //DOWNLOAD
         public ActionResult Donwload()
@@ -67,37 +107,31 @@ namespace Laboratorio2_EDD2.Controllers
             }
             return View(lst);
         }
-
         public ActionResult DownloadFile(string filename)
         {
-            if (Path.GetExtension(filename) == ".huff" || Path.GetExtension(filename) == ".txt" || Path.GetExtension(filename) == ".LZW")
-            {
-                string fullpath = Path.Combine(Server.MapPath("~/Uploads"), filename);
-                return File(fullpath, "LZW/huff");
 
-            }
-            else
-            {
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
-            }
+            var path = AppDomain.CurrentDomain.BaseDirectory + "Uploads/";
+            var bytesDoc = System.IO.File.ReadAllBytes(path + filename);
+            return File(bytesDoc, System.Net.Mime.MediaTypeNames.Application.Octet, filename);  
         }
-
+        
+        //VISTA ERROR
         public ActionResult error()
         {
             return View();
         }
 
+        //CESAR CIFRADO
         public ActionResult Cesar()
         {
 
             return View();
         }
-
-
         [HttpPost]
         public ActionResult Cesar(HttpPostedFileBase file, string llave)
         {
             SubirArchivo recibirkey = new SubirArchivo();
+
             recibirkey.clave = llave;
             char[] verificar = llave.ToCharArray();
             bool repetido = false;
@@ -118,7 +152,7 @@ namespace Laboratorio2_EDD2.Controllers
             if (!repetido)
             {
                 var fileName = Path.GetFileName(file.FileName);//Nombre del archivo a cargar
-                file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
+                file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));
                 string filePath = string.Empty;
                 if (file != null)
                 {
@@ -135,7 +169,7 @@ namespace Laboratorio2_EDD2.Controllers
                     }
                     filePath = NuevaRuta + Path.GetFileName(file.FileName);
                 }
-                Data.Instancia.LecturaArchivo(filePath, fileName, 0,llave);
+                Data.Instancia.LecturaArchivo(filePath, fileName, 0,llave,0);
 
             }
             else
@@ -147,76 +181,125 @@ namespace Laboratorio2_EDD2.Controllers
             
             return View();
         }
-
+        //DECIFRADO CESAR
         public ActionResult CesarDescifrado()
         {
 
             return View();
         }
-
-
         [HttpPost]
         public ActionResult CesarDescifrado(HttpPostedFileBase file, string llave)
         {
-            SubirArchivo recibirkey = new SubirArchivo();
-            recibirkey.clave = llave;
-            char[] verificar = llave.ToCharArray();
-            bool repetido = false;
-            for (var i = 0; i < llave.Length; i++)
+            var allowedExtensions = new string[] { ".cif" };
+            string extension = Path.GetExtension(file.FileName);
+            if (allowedExtensions.Contains(extension))
             {
-                for (var j = 0; j < llave.Length; j++)
+                SubirArchivo recibirkey = new SubirArchivo();
+                recibirkey.clave = llave;
+                char[] verificar = llave.ToCharArray();
+                bool repetido = false;
+                for (var i = 0; i < llave.Length; i++)
                 {
-                    if (i != j)
+                    for (var j = 0; j < llave.Length; j++)
                     {
-                        if (verificar[i] == verificar[j])
+                        if (i != j)
                         {
-                            repetido = true;
+                            if (verificar[i] == verificar[j])
+                            {
+                                repetido = true;
+                            }
                         }
                     }
                 }
-            }
 
-            if (!repetido)
-            {
-                var fileName = Path.GetFileName(file.FileName);//Nombre del archivo a cargar
-                file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
-                string filePath = string.Empty;
-                if (file != null)
+                if (!repetido)
                 {
-                    string NuevaRuta = "";
-                    string path = Server.MapPath("~/Uploads");
-                    string[] Direccion = path.Split('\\');
-                    if (!Directory.Exists(path))
+                    var fileName = Path.GetFileName(file.FileName);//Nombre del archivo a cargar
+                    file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
+                    string filePath = string.Empty;
+                    if (file != null)
                     {
-                        Directory.CreateDirectory(path);
+                        string NuevaRuta = "";
+                        string path = Server.MapPath("~/Uploads");
+                        string[] Direccion = path.Split('\\');
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        for (var i = 0; i < Direccion.Length; i++)
+                        {
+                            NuevaRuta += Direccion[i] + "/";
+                        }
+                        filePath = NuevaRuta + Path.GetFileName(file.FileName);
                     }
-                    for (var i = 0; i < Direccion.Length; i++)
-                    {
-                        NuevaRuta += Direccion[i] + "/";
-                    }
-                    filePath = NuevaRuta + Path.GetFileName(file.FileName);
-                }
-                Data.Instancia.LecturaArchivo(filePath, fileName, 1, llave);
+                    Data.Instancia.LecturaArchivo(filePath, fileName, 1, llave, 0);
 
+                }
+                else
+                {
+
+                    return View("error");
+
+                }
+
+                return View();
             }
             else
             {
-
                 return View("error");
-
             }
-
-            return View();
         }
-
-
-
-
-        // GET: IngresoData/Details/5
-        public ActionResult Details(int id)
+        //ESPIRAL CIFRADO
+        public ActionResult CifrarEspiral()
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult CifrarEspiral(HttpPostedFileBase file, int m, string llenado)
+        {
+            SubirArchivo recibirkey = new SubirArchivo();
+            int verificarM;
+            recibirkey.m = m;
+            recibirkey.llenado = llenado;
+            var fileName = Path.GetFileName(file.FileName);
+            file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));
+            string filePath = string.Empty;
+
+            if (llenado == "H")
+            {
+                verificarM = 1;
+            }
+            else if(llenado == "V")
+            {
+                verificarM = 2;
+            }
+            else
+            {
+                return View("error");
+            } //mmm escriba bien xfa
+
+            if (file != null)
+            {
+                string NuevaRuta = "";
+                string path = Server.MapPath("~/Uploads");
+                string[] Direccion = path.Split('\\');
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                for (var i = 0; i < Direccion.Length; i++)
+                {
+                    NuevaRuta += Direccion[i] + "/";
+                }
+                filePath = NuevaRuta + Path.GetFileName(file.FileName);
+            }
+
+            Data.Instancia.LecturaArchivo(filePath, fileName, m, "",verificarM);
+            return View();
+        }
+
+
+        
 
         // GET: IngresoData/Create
         public ActionResult Create()
