@@ -130,6 +130,7 @@
     <Compile Include="Helpers\Data.cs" />
     <Compile Include="Models\SubirArchivo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SDES\SDES.cs" />
     <Compile Include="ZigZag\ZigZagcompression.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +155,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="SDES\Permutaciones.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
