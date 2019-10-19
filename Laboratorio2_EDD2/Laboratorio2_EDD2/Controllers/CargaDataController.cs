@@ -30,6 +30,10 @@ namespace Laboratorio2_EDD2.Controllers
 
             SubirArchivo recibirkey = new SubirArchivo();
             recibirkey.llave = llave;
+            if (llave>1023)
+            {
+                return View("error");
+            }
             var fileName = Path.GetFileName(file.FileName);
             file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));
             string filePath = string.Empty;
