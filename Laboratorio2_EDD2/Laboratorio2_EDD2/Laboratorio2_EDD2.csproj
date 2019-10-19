@@ -155,7 +155,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="SDES\Permutaciones.txt" />
+    <Content Include="Views\CargaData\DescifrarSDES.cshtml" />
+    <Resource Include="SDES\Permutaciones.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -177,6 +178,7 @@
     <Content Include="Views\CargaData\CesarDescifrado.cshtml" />
     <Content Include="Views\CargaData\CifrarEspiral.cshtml" />
     <Content Include="Views\CargaData\DecifrarZigZag.cshtml" />
+    <Content Include="Views\CargaData\SubirSDES.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -7,6 +7,7 @@ using System.Text;
 using System.Web.Mvc;
 using Laboratorio2_EDD2.Helpers;
 using Laboratorio2_EDD2.Models;
+using Laboratorio2_EDD2.SDES;
 
 namespace Laboratorio2_EDD2.Controllers
 {
@@ -17,13 +18,102 @@ namespace Laboratorio2_EDD2.Controllers
         {
             return View();
         }
-        //
+        //SDES
+        public ActionResult SubirSDES()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SubirSDES(HttpPostedFileBase file, int llave)
+        {
+
+            SubirArchivo recibirkey = new SubirArchivo();
+            recibirkey.llave = llave;
+            var fileName = Path.GetFileName(file.FileName);
+            file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));
+            string filePath = string.Empty;
+            if (file != null)
+            {
+                string NuevaRuta = "";
+                string path = Server.MapPath("~/Uploads");
+                string[] Direccion = path.Split('\\');
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                for (var i = 0; i < Direccion.Length; i++)
+                {
+                    NuevaRuta += Direccion[i] + "/";
+                }
+                filePath = NuevaRuta + Path.GetFileName(file.FileName);
+            }
+
+            string permutaciones = Server.MapPath(@"~\SDES\Permutaciones.txt");
+            string[] Direccion1 = permutaciones.Split('\\');
+            string rutaPer = string.Empty;
+            
+            for (var i = 0; i < Direccion1.Length; i++)
+            {
+                rutaPer += Direccion1[i] + "/";
+            }
+            rutaPer.Remove((rutaPer.Length-2), 1);
+            Data.Instancia.lecturaSDES(filePath, llave,permutaciones,1);
+            return View();
+        }
+
+        //SDES
+        public ActionResult DescifrarSDES()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult DescifrarSDES(HttpPostedFileBase file, int llave)
+        {
+
+            SubirArchivo recibirkey = new SubirArchivo();
+            recibirkey.llave = llave;
+            var fileName = Path.GetFileName(file.FileName);
+            file.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));
+            string filePath = string.Empty;
+            if (file != null)
+            {
+                string NuevaRuta = "";
+                string path = Server.MapPath("~/Uploads");
+                string[] Direccion = path.Split('\\');
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                for (var i = 0; i < Direccion.Length; i++)
+                {
+                    NuevaRuta += Direccion[i] + "/";
+                }
+                filePath = NuevaRuta + Path.GetFileName(file.FileName);
+            }
+
+            string permutaciones = Server.MapPath(@"~\SDES\Permutaciones.txt");
+            string[] Direccion1 = permutaciones.Split('\\');
+            string rutaPer = string.Empty;
+
+            for (var i = 0; i < Direccion1.Length; i++)
+            {
+                rutaPer += Direccion1[i] + "/";
+            }
+            rutaPer.Remove((rutaPer.Length - 2), 1);
+            Data.Instancia.lecturaSDES(filePath, llave, permutaciones, 0);
+            return View();
+        }
+
+
+
         public ActionResult SubirArchivo()
         {
 
             return View();
         }
-
+    
         //ZIGZAG
         [HttpPost]
         public ActionResult SubirArchivo(HttpPostedFileBase file, int llave)
@@ -293,6 +383,7 @@ namespace Laboratorio2_EDD2.Controllers
                 }
                 filePath = NuevaRuta + Path.GetFileName(file.FileName);
             }
+
 
             Data.Instancia.LecturaArchivo(filePath, fileName, m, "",verificarM);
             return View();

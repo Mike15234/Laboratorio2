@@ -7,6 +7,7 @@ using Laboratorio2_EDD2.Controllers;
 using Laboratorio2_EDD2.ZigZag;
 using Laboratorio2_EDD2.Cesar;
 using Laboratorio2_EDD2.Espiral;
+using Laboratorio2_EDD2.SDES;
 namespace Laboratorio2_EDD2.Helpers
 {
     public class Data
@@ -66,6 +67,7 @@ namespace Laboratorio2_EDD2.Helpers
 
                     }
                 }
+
 
             }
             else if ((llave != 0)&&(clave=="")&&(llenado==1000))
@@ -222,6 +224,59 @@ namespace Laboratorio2_EDD2.Helpers
                 }
 
             }
+        }
+
+        public void lecturaSDES(string ruta,int num,string rutaPermutaciones,int confirmacion)
+        {
+            SDES.SDES sdes = new SDES.SDES();
+            string K1 = string.Empty, K2 = string.Empty;
+            using (var stream = new FileStream(ruta, FileMode.Open))
+                {
+                    using (var reader = new BinaryReader(stream))
+                    {
+                        var byteBuffer = new byte[bufferLength];
+                        while (reader.BaseStream.Position != reader.BaseStream.Length)
+                        {
+                            byteBuffer = reader.ReadBytes(bufferLength);
+                        }
+                    string permutado = sdes.GenerarPermutado(num, rutaPermutaciones);
+                    K1 =sdes.LLAVES1(permutado);
+                    K2 = sdes.LLAVES2(permutado);
+                    string[] nuevo = new string[5];
+                    byte[] resultado= new byte[byteBuffer.Length];
+                    if (confirmacion ==1)
+                    {
+                        resultado = sdes.Cifrar(byteBuffer, K1, K2);
+                        nuevo = ruta.Split('.');
+                        nuevo[0] += ".scif";
+                    }
+                    else
+                    {
+                        resultado = sdes.Cifrar(byteBuffer, K2, K1);
+                        nuevo = ruta.Split('.');
+                        nuevo[0] += "descifrado.txt";
+                    }
+                    
+                        if (!File.Exists(nuevo[0]))
+                        {
+
+                            using (var writeStream1 = new FileStream(nuevo[0], FileMode.OpenOrCreate))
+                            {
+                                using (var writer = new BinaryWriter(writeStream1))
+                                {
+                                    foreach (var item in resultado)
+                                    {
+                                        writer.Write(item);
+                                    }
+                                    writer.Close();
+                                }
+                                writeStream1.Close();
+
+                            }
+                        }
+
+                    }
+                }
 
 
         }
