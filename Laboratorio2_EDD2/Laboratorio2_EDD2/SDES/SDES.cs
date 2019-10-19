@@ -77,7 +77,7 @@ namespace Laboratorio2_EDD2.SDES
             return permutado;
             
         }
-
+        string Parallave2 = string.Empty;
         public string LLAVES1(string permutado)
         {
             string KK1 = string.Empty;
@@ -88,7 +88,7 @@ namespace Laboratorio2_EDD2.SDES
             B2 += B2.Substring(0, 1);
             B2 = B2.Substring(1, (B2.Length-1));
             permutado = B1 + B2;
-            
+            Parallave2 = permutado;
             for (int i = 0; i<P8.Length; i++)
             {
                 KK1 += permutado.ElementAt(Convert.ToInt32(P8[i]));
@@ -96,11 +96,12 @@ namespace Laboratorio2_EDD2.SDES
             return KK1;
         }
 
-        public string LLAVES2(string permutado)
+        public string LLAVES2()
         {
+            string permutado = string.Empty;
             string KK2 = string.Empty;
-            string B1 = permutado.Substring(0, (permutado.Length / 2));
-            string B2 = permutado.Substring((permutado.Length / 2), (permutado.Length / 2));
+            string B1 = Parallave2.Substring(0, (Parallave2.Length / 2));
+            string B2 = Parallave2.Substring((Parallave2.Length / 2), (Parallave2.Length / 2));
             B1 += B1.Substring(0, 2);
             B1 = B1.Substring(2, (B1.Length - 2));
             B2 += B2.Substring(0, 2);
@@ -200,7 +201,7 @@ namespace Laboratorio2_EDD2.SDES
                 nuevop = string.Empty;
                 for (var j = 0; j < EP.Length; j++)
                 {
-                    nuevop += XOR.ElementAt(Convert.ToInt32(EP[j]));/
+                    nuevop += XOR.ElementAt(Convert.ToInt32(EP[j]));
                 }
 
                 LLave2 = K2.ToCharArray();
@@ -250,9 +251,17 @@ namespace Laboratorio2_EDD2.SDES
                 Parte2 = XOR+Parte2;
                 byte[] IPI = new byte[IP.Length];//IP inversa
                 string Ordenada = "01234567";
+                char[] Orden = Ordenada.ToCharArray();
                     for (var j = 0; j < IP.Length; j++)
                 {
-                    IPI[j]= IP[Convert.ToInt32(Ordenada[j].ToString())];///SABER
+                    for (var h = 0; h < IP.Length; h++)
+                    {
+                        if (IP[h].ToString()==Orden[j].ToString())
+                        {
+                            IPI[j] = Convert.ToByte((h).ToString());
+                        }
+                    }
+                    //IPI[j]= IP[Convert.ToInt32(Ordenada[j].ToString())];///SABER
                 }
 
                 string Rbinario = string.Empty;

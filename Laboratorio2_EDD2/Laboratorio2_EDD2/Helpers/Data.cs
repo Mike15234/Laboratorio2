@@ -241,7 +241,7 @@ namespace Laboratorio2_EDD2.Helpers
                         }
                     string permutado = sdes.GenerarPermutado(num, rutaPermutaciones);
                     K1 =sdes.LLAVES1(permutado);
-                    K2 = sdes.LLAVES2(permutado);
+                    K2 = sdes.LLAVES2();
                     string[] nuevo = new string[5];
                     byte[] resultado= new byte[byteBuffer.Length];
                     if (confirmacion ==1)
