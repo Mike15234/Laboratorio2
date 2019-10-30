@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Laboratorio2_EDD2.Helpers;
 using Laboratorio2_EDD2.Models;
 using Laboratorio2_EDD2.SDES;
+using Laboratorio2_EDD2.RSA;
 
 namespace Laboratorio2_EDD2.Controllers
 {
@@ -18,6 +19,78 @@ namespace Laboratorio2_EDD2.Controllers
         {
             return View();
         }
+
+        //GENERAR LLAVES RSA
+        public ActionResult GenerarLlaver()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult GenerarLlaver(int p, int q)
+        {
+            RSAprocess llaves = new RSAprocess();
+            SubirArchivo obtencionLllaves = new SubirArchivo();
+            obtencionLllaves.P = p;
+            obtencionLllaves.Q = q;
+            llaves.GenerandoLlaves(p,q);
+
+            return View("RSACifrar");
+        }
+
+
+        //RSA CIFRADO
+        public ActionResult RSACifrar()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RSACifrar( HttpPostedFileBase key, HttpPostedFileBase text)
+        {
+            SubirArchivo recibirkey = new SubirArchivo();
+
+            var fileName = Path.GetFileName(text.FileName);//Nombre del archivo a cargar
+            text.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
+            key.SaveAs(Server.MapPath(@"~\llaveSubidas\" + fileName));//se guarda en LlavesSubidas carpeta del proyecto
+            string filePathText = string.Empty;
+            string filePathKey = string.Empty;
+            if (text != null)
+            {
+                string NuevaRutaText = "";
+                string NuevaRutaKey = "";
+                string path = Server.MapPath("~/Uploads");
+                string pathKey = Server.MapPath("~/llaveSubidas");
+                string[] Direccion = path.Split('\\');
+                string[] DKeyDirection = pathKey.Split('\\');
+                //PARA EL ARCHIVO QUE SE VA A  CIFRAR
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                //PARA LA RUTA DE LA LLAVE QUE SE USA PARA CIFRAR
+                if (!Directory.Exists(pathKey))
+                {
+                    Directory.CreateDirectory(pathKey);
+                }
+                //TEXTO
+                for (var i = 0; i < Direccion.Length; i++)
+                {
+                    NuevaRutaText += Direccion[i] + "/";
+                }
+                //PARA LA LLAVE
+                for (var i = 0; i < DKeyDirection.Length; i++)
+                {
+                    NuevaRutaKey+=DKeyDirection[i] + "/";
+                }
+                filePathText = NuevaRutaText + Path.GetFileName(text.FileName);
+                filePathKey = NuevaRutaKey + Path.GetFileName(key.FileName);
+            }
+            //Data.Instancia.lecturasRSA(filePathKey);
+            //Data.Instancia.lecturasRSA(filePathText);
+            return View();
+        }
+
         //SDES
         public ActionResult SubirSDES()
         {

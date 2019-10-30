@@ -22,8 +22,6 @@ namespace Laboratorio2_EDD2.SDES
             string binario = Convert.ToString(Numero, 2).PadLeft(10, '0');
 
             var byteBuffer = new byte[bufferLength];
-
-            //Hay que cambiar la ruta para las permutaciones
             
             
             using (var stream = new FileStream(rutaPermutaciones, FileMode.Open))
