@@ -91,15 +91,16 @@ namespace Laboratorio2_EDD2.RSA
                     d++;
                 }
             }
-
+            
             string privada = N.ToString() + "," + d.ToString();
             string publica = N.ToString() + "," + e.ToString();
             byte[] bytesprivada = System.Text.Encoding.ASCII.GetBytes(privada);
             byte[] bytespublica = System.Text.Encoding.ASCII.GetBytes(publica);
-
+            
 
             string pathprivada = path + "llaveprivada.txt";
             string pathpublica = path + "llavepublica.txt";
+            
             using (var writeStream1 = new FileStream(pathprivada, FileMode.OpenOrCreate))
                 {
                     using (var writer = new BinaryWriter(writeStream1))
@@ -129,44 +130,53 @@ namespace Laboratorio2_EDD2.RSA
 
         }
 
-
-
-        public byte CifrandoRSA(ulong numCifrar,ulong e, ulong N)
+        public int CifrandoRSACantByte(int cifrado)
         {
-            ulong Cifrado=1;
-            numCifrar = numCifrar % N;
-            while (e > 0)
-            {
-                if ((e & 1) == 1)   
-                {
-                    Cifrado = ((Cifrado * numCifrar) % N);
-                    // e = e / 2;
-                }
-
-                e = e >> 1;
-                numCifrar = Convert.ToByte((numCifrar * numCifrar) % N);
-            }
-
-            return Convert.ToByte(Cifrado);
+            return cifrado / 256;
         }
 
 
-        public byte DescifradoRSA(ulong numCifrado, ulong d, ulong N)
+        public int CifrandoRSA(int numCifrar,int e, int N)
         {
-            ulong Descifrado = 1;
-            numCifrado = numCifrado % N;
-            while (d > 0)
-            {
-                if ((d & 1) == 1)
-                {
-                    Descifrado = (Descifrado * numCifrado) % N;
-                    // e = e / 2;
-                }
+            int Cifrado = 1;
 
-                d = d >> 1;
-                numCifrado = (numCifrado * numCifrado) % N;
+            numCifrar = numCifrar % N;
+            while (e > 0)
+            {
+                if ((e & 1) == 1)
+                {
+                    Cifrado = (Cifrado * numCifrar) % N;
+
+                }
+                //  e = e / 2;
+                e = e >> 1;
+                numCifrar = (numCifrar * numCifrar) % N;
             }
-            return Convert.ToByte(Descifrado);
+
+            Cifrado = Cifrado % N;
+            return Cifrado;
+        }
+
+
+        public int DescifrandoRSA(int numDescifrar, int e, int N)
+        {
+            int Cifrado = 1;
+
+            numDescifrar = numDescifrar % N;
+            while (e > 0)
+            {
+                if ((e & 1) == 1)
+                {
+                    Cifrado = (Cifrado * numDescifrar) % N;
+
+                }
+                //  e = e / 2;
+                e = e >> 1;
+                numDescifrar = (numDescifrar * numDescifrar) % N;
+            }
+
+            Cifrado = Cifrado % N;
+            return Cifrado;
         }
 
     }

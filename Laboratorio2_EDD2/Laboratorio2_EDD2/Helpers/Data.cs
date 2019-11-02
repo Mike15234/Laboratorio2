@@ -297,9 +297,7 @@ namespace Laboratorio2_EDD2.Helpers
                     {
                         byteBufferKey = reader.ReadBytes(bufferLength);
                     }
-
                 }
-
             }
 
             string converted = Encoding.ASCII.GetString(byteBufferKey, 0, byteBufferKey.Length);
@@ -314,46 +312,41 @@ namespace Laboratorio2_EDD2.Helpers
                     {
                         byteBufferText = reader.ReadBytes(bufferLength);
                     }
-
                 }
-
             }
-
-            byte[] nuevoCifrado = new byte[byteBufferText.Length];
+            
+            var nuevoCifrado = new List<byte>();
             string ruta = string.Empty;
             string[] path = rutatexto.Split('.');
             if (cif == 1)
             {
                 ruta = path[0] + ".rsacif";
-                for (var i = 0; i < byteBufferText.Length; i++)
+                for (int i = 0; i < byteBufferText.Length; i++)
                 {
-                    nuevoCifrado[i] = rsa.CifrandoRSA(byteBufferText[i], Convert.ToUInt64(llaves[1]), Convert.ToUInt64(llaves[0]));
+                    var byteInicial = rsa.CifrandoRSA(byteBufferText[i], Convert.ToInt32(llaves[1]), Convert.ToInt32(llaves[0]));
+                    nuevoCifrado.Add(Convert.ToByte(rsa.CifrandoRSACantByte(byteInicial)));
+                    nuevoCifrado.Add(Convert.ToByte(byteInicial % 256));
                 }
             }
             else if (cif == 2)
             {
                 ruta = path[0] + "descif.txt";
-                for (var i = 0; i < byteBufferText.Length; i++)
+                for (var i = 0; i < byteBufferText.Length; i+=2)
                 {
-                    nuevoCifrado[i] = rsa.DescifradoRSA(byteBufferText[i], Convert.ToUInt64(llaves[1]), Convert.ToUInt64(llaves[0]));
+                    var cantidadBytes = Convert.ToInt32(byteBufferText[i]) * 256;
+                    var resto = Convert.ToInt32(byteBufferText[i + 1]);
+                    var numDescifrar = cantidadBytes + resto;
+                    nuevoCifrado.Add(Convert.ToByte(rsa.DescifrandoRSA(numDescifrar, Convert.ToInt32(llaves[1]), Convert.ToInt32(llaves[0]))));
                 }
             }
-            
-            
-            
 
             using (var writeStream1 = new FileStream(ruta, FileMode.OpenOrCreate))
             {
                 using (var writer = new BinaryWriter(writeStream1))
                 {
-                    foreach (var item in nuevoCifrado)
-                    {
-                        writer.Write(item);
-                    }
-                    writer.Close();
+                    foreach (var caracter in nuevoCifrado)
+                        writer.Write(caracter);
                 }
-                writeStream1.Close();
-
             }
 
         }

@@ -92,7 +92,7 @@ namespace Laboratorio2_EDD2.Controllers
             return View();
         }
 
-        //RSA CIFRADO
+        //RSA DESCIFRADO
         public ActionResult RSADescifrar()
         {
 
