@@ -9,6 +9,7 @@ using Laboratorio2_EDD2.Cesar;
 using Laboratorio2_EDD2.Espiral;
 using Laboratorio2_EDD2.SDES;
 using Laboratorio2_EDD2.RSA;
+using System.Text;
 
 namespace Laboratorio2_EDD2.Helpers
 {
@@ -283,14 +284,15 @@ namespace Laboratorio2_EDD2.Helpers
 
         }
 
-        public void lecturasRSA(string rutallave,string rutatexto)
+        public void lecturasRSA(string rutallave, string rutatexto)
         {
             RSAprocess rsa = new RSAprocess();
+            var byteBufferKey = new byte[bufferLength];
+            var byteBufferText = new byte[bufferLength];
             using (var stream = new FileStream(rutallave, FileMode.Open))
             {
                 using (var reader = new BinaryReader(stream))
                 {
-                    var byteBufferKey = new byte[bufferLength];
                     while (reader.BaseStream.Position != reader.BaseStream.Length)
                     {
                         byteBufferKey = reader.ReadBytes(bufferLength);
@@ -299,19 +301,31 @@ namespace Laboratorio2_EDD2.Helpers
                 }
 
             }
+
+            string converted = Encoding.ASCII.GetString(byteBufferKey, 0, byteBufferKey.Length);
+
+            string[] llaves = converted.Split(',');
+
             using (var stream = new FileStream(rutatexto, FileMode.Open))
             {
                 using (var reader = new BinaryReader(stream))
                 {
-                    var byteBufferText = new byte[bufferLength];
                     while (reader.BaseStream.Position != reader.BaseStream.Length)
                     {
                         byteBufferText = reader.ReadBytes(bufferLength);
                     }
-                   // rsa.CifrandoRSA(byteBufferKey,byteBufferText);
+
                 }
 
             }
+
+            byte[] nuevoCifrado = new byte[byteBufferText.Length];
+
+            for (var i = 0;  i < byteBufferText.Length; i++)
+            {
+                nuevoCifrado[i]=rsa.CifrandoRSA(byteBufferText[i], Convert.ToUInt64(llaves[1]), Convert.ToUInt64(llaves[0]));
+            }
+            
 
         }
     }

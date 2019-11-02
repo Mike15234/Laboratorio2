@@ -32,7 +32,8 @@ namespace Laboratorio2_EDD2.Controllers
             SubirArchivo obtencionLllaves = new SubirArchivo();
             obtencionLllaves.P = p;
             obtencionLllaves.Q = q;
-            llaves.GenerandoLlaves(p,q);
+            string key=(Server.MapPath(@"~\LlavesGeneradas\"));
+            llaves.GenerandoLlaves(p, q,key);
 
             return View("RSACifrar");
         }
@@ -46,13 +47,14 @@ namespace Laboratorio2_EDD2.Controllers
         }
 
         [HttpPost]
-        public ActionResult RSACifrar( HttpPostedFileBase key, HttpPostedFileBase text)
+        public ActionResult RSACifrar( HttpPostedFileBase text, HttpPostedFileBase key)
         {
             SubirArchivo recibirkey = new SubirArchivo();
 
-            var fileName = Path.GetFileName(text.FileName);//Nombre del archivo a cargar
-            text.SaveAs(Server.MapPath(@"~\Uploads\" + fileName));//Guardado del archivo en la ruta física 
-            key.SaveAs(Server.MapPath(@"~\llaveSubidas\" + fileName));//se guarda en LlavesSubidas carpeta del proyecto
+            var fileName1 = Path.GetFileName(text.FileName);//Nombre del archivo a cargar
+            var fileName2 = Path.GetFileName(key.FileName);
+            text.SaveAs(Server.MapPath(@"~\Uploads\" + fileName1));//Guardado del archivo en la ruta física 
+            key.SaveAs(Server.MapPath(@"~\LlavesSubidas\" + fileName2));//se guarda en LlavesSubidas carpeta del proyecto
             string filePathText = string.Empty;
             string filePathKey = string.Empty;
             if (text != null)
@@ -60,9 +62,9 @@ namespace Laboratorio2_EDD2.Controllers
                 string NuevaRutaText = "";
                 string NuevaRutaKey = "";
                 string path = Server.MapPath("~/Uploads");
-                string pathKey = Server.MapPath("~/llaveSubidas");
+                string pathKey = Server.MapPath("~/LlavesSubidas");
                 string[] Direccion = path.Split('\\');
-                string[] DKeyDirection = pathKey.Split('\\');
+                string[] Direction = pathKey.Split('\\');
                 //PARA EL ARCHIVO QUE SE VA A  CIFRAR
                 if (!Directory.Exists(path))
                 {
@@ -76,18 +78,17 @@ namespace Laboratorio2_EDD2.Controllers
                 //TEXTO
                 for (var i = 0; i < Direccion.Length; i++)
                 {
-                    NuevaRutaText += Direccion[i] + "/";
+                    NuevaRutaKey += Direccion[i] + "/";
                 }
                 //PARA LA LLAVE
-                for (var i = 0; i < DKeyDirection.Length; i++)
+                for (var i = 0; i < Direction.Length; i++)
                 {
-                    NuevaRutaKey+=DKeyDirection[i] + "/";
+                    NuevaRutaText+=Direction[i] + "/";
                 }
-                filePathText = NuevaRutaText + Path.GetFileName(text.FileName);
-                filePathKey = NuevaRutaKey + Path.GetFileName(key.FileName);
+                filePathText = NuevaRutaText + Path.GetFileName(key.FileName);
+                filePathKey = NuevaRutaKey + Path.GetFileName(text.FileName);
             }
-            //Data.Instancia.lecturasRSA(filePathKey);
-            //Data.Instancia.lecturasRSA(filePathText);
+            Data.Instancia.lecturasRSA(filePathText, filePathKey);
             return View();
         }
 

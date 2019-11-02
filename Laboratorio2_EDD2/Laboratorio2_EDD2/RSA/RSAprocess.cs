@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using Laboratorio2_EDD2.RSA;
@@ -7,7 +8,7 @@ namespace Laboratorio2_EDD2.RSA
 {
     public class RSAprocess
     {
-        public int GenerandoLlaves(int p, int q)
+        public void GenerandoLlaves(int p, int q,string path)
         {
             //Generamos d y e y N
             VerificacionNumeros numeros = new VerificacionNumeros();
@@ -64,10 +65,10 @@ namespace Laboratorio2_EDD2.RSA
             }
 
             int aux = 0;
-            e = 17;
             for (int i = 0; i < cont; i++)
             {
-                if ( numeros.coprimo(fifi[i], fi) && fifi[i] > 10)//???
+                if ( numeros.coprimo(fifi[i], fi) && fifi[i] > 10)
+
                 {
                     aux++;
                     if (aux == 2)
@@ -90,30 +91,63 @@ namespace Laboratorio2_EDD2.RSA
                     d++;
                 }
             }
-            //por si se pierden en proceso
-            int CopiaD = d;
-            int CopiaE = e;
 
-            return 0;
+            string privada = N.ToString() + "," + d.ToString();
+            string publica = N.ToString() + "," + e.ToString();
+            byte[] bytesprivada = System.Text.Encoding.ASCII.GetBytes(privada);
+            byte[] bytespublica = System.Text.Encoding.ASCII.GetBytes(publica);
+
+
+            string pathprivada = path + "llaveprivada.txt";
+            string pathpublica = path + "llavepublica.txt";
+            using (var writeStream1 = new FileStream(pathprivada, FileMode.OpenOrCreate))
+                {
+                    using (var writer = new BinaryWriter(writeStream1))
+                    {
+                        foreach (var item in bytesprivada)
+                        {
+                            writer.Write(item);
+                        }
+                        writer.Close();
+                    }
+                    writeStream1.Close();
+
+            }
+            using (var writeStream1 = new FileStream(pathpublica, FileMode.OpenOrCreate))
+            {
+                using (var writer = new BinaryWriter(writeStream1))
+                {
+                    foreach (var item in bytespublica)
+                    {
+                        writer.Write(item);
+                    }
+                    writer.Close();
+                }
+                writeStream1.Close();
+
+            }
+
         }
 
-        public int CifrandoRSA(int llave, int numCifrar,int e, int N)
+
+
+        public byte CifrandoRSA(ulong numCifrar,ulong e, ulong N)
         {
-            int Cifrado = 1;
+            ulong Cifrado=1;
             numCifrar = numCifrar % N;
             while (e > 0)
             {
-                if ((e & 1) == 1)
+                if ((e & 1) == 1)   
                 {
-                    Cifrado = (Cifrado * numCifrar) % N;
+                    Cifrado = ((Cifrado * numCifrar) % N);
                     // e = e / 2;
                 }
 
                 e = e >> 1;
-                numCifrar = (numCifrar * numCifrar) % N;
+                numCifrar = Convert.ToByte((numCifrar * numCifrar) % N);
             }
 
-            return Cifrado;
+            return Convert.ToByte(Cifrado);
         }
 
 
