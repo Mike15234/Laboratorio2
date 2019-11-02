@@ -11,6 +11,9 @@ namespace Laboratorio2_EDD2.Models
         public string clave { get; set; }
         public int m { get; set; }
         public string llenado { get; set; }
+        public int P { get; set; }
+        public int Q { get; set; }
+
 
         public void SubirArchivos(string ruta, HttpPostedFileBase file)
         {

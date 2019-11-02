@@ -130,6 +130,9 @@
     <Compile Include="Helpers\Data.cs" />
     <Compile Include="Models\SubirArchivo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RSA\RSAprocess.cs" />
+    <Compile Include="RSA\VerificacionNumeros.cs" />
+    <Compile Include="SDES\SDES.cs" />
     <Compile Include="ZigZag\ZigZagcompression.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +157,11 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Views\CargaData\DescifrarSDES.cshtml" />
+    <Content Include="Views\CargaData\GenerarLlaver.cshtml" />
+    <Content Include="Views\CargaData\RSACifrar.cshtml" />
+    <Content Include="Views\CargaData\RSADescifrar.cshtml" />
+    <Resource Include="SDES\Permutaciones.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -175,9 +183,11 @@
     <Content Include="Views\CargaData\CesarDescifrado.cshtml" />
     <Content Include="Views\CargaData\CifrarEspiral.cshtml" />
     <Content Include="Views\CargaData\DecifrarZigZag.cshtml" />
+    <Content Include="Views\CargaData\SubirSDES.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="LlavesSubidas\" />
     <Folder Include="Uploads\" />
     <Folder Include="Views\IngresoData\" />
   </ItemGroup>
