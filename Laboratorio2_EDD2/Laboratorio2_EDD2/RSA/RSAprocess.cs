@@ -151,9 +151,9 @@ namespace Laboratorio2_EDD2.RSA
         }
 
 
-        public byte DescifradoRSA(int llave, int numCifrado, int d, int N)
+        public byte DescifradoRSA(ulong numCifrado, ulong d, ulong N)
         {
-            int Descifrado = 1;
+            ulong Descifrado = 1;
             numCifrado = numCifrado % N;
             while (d > 0)
             {
@@ -166,7 +166,7 @@ namespace Laboratorio2_EDD2.RSA
                 d = d >> 1;
                 numCifrado = (numCifrado * numCifrado) % N;
             }
-            return 0;
+            return Convert.ToByte(Descifrado);
         }
 
     }

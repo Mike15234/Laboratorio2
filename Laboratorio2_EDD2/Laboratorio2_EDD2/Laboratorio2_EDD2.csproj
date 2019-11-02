@@ -160,6 +160,7 @@
     <Content Include="Views\CargaData\DescifrarSDES.cshtml" />
     <Content Include="Views\CargaData\GenerarLlaver.cshtml" />
     <Content Include="Views\CargaData\RSACifrar.cshtml" />
+    <Content Include="Views\CargaData\RSADescifrar.cshtml" />
     <Resource Include="SDES\Permutaciones.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

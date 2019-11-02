@@ -35,7 +35,7 @@ namespace Laboratorio2_EDD2.Controllers
             string key=(Server.MapPath(@"~\LlavesGeneradas\"));
             llaves.GenerandoLlaves(p, q,key);
 
-            return View("RSACifrar");
+            return View();
         }
 
 
@@ -88,7 +88,60 @@ namespace Laboratorio2_EDD2.Controllers
                 filePathText = NuevaRutaText + Path.GetFileName(key.FileName);
                 filePathKey = NuevaRutaKey + Path.GetFileName(text.FileName);
             }
-            Data.Instancia.lecturasRSA(filePathText, filePathKey);
+            Data.Instancia.lecturasRSA(filePathText, filePathKey,1);
+            return View();
+        }
+
+        //RSA CIFRADO
+        public ActionResult RSADescifrar()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RSADescifrar(HttpPostedFileBase text, HttpPostedFileBase key)
+        {
+            SubirArchivo recibirkey = new SubirArchivo();
+
+            var fileName1 = Path.GetFileName(text.FileName);//Nombre del archivo a cargar
+            var fileName2 = Path.GetFileName(key.FileName);
+            text.SaveAs(Server.MapPath(@"~\Uploads\" + fileName1));//Guardado del archivo en la ruta física 
+            key.SaveAs(Server.MapPath(@"~\LlavesSubidas\" + fileName2));//se guarda en LlavesSubidas carpeta del proyecto
+            string filePathText = string.Empty;
+            string filePathKey = string.Empty;
+            if (text != null)
+            {
+                string NuevaRutaText = "";
+                string NuevaRutaKey = "";
+                string path = Server.MapPath("~/Uploads");
+                string pathKey = Server.MapPath("~/LlavesSubidas");
+                string[] Direccion = path.Split('\\');
+                string[] Direction = pathKey.Split('\\');
+                //PARA EL ARCHIVO QUE SE VA A  CIFRAR
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                //PARA LA RUTA DE LA LLAVE QUE SE USA PARA CIFRAR
+                if (!Directory.Exists(pathKey))
+                {
+                    Directory.CreateDirectory(pathKey);
+                }
+                //TEXTO
+                for (var i = 0; i < Direccion.Length; i++)
+                {
+                    NuevaRutaKey += Direccion[i] + "/";
+                }
+                //PARA LA LLAVE
+                for (var i = 0; i < Direction.Length; i++)
+                {
+                    NuevaRutaText += Direction[i] + "/";
+                }
+                filePathText = NuevaRutaText + Path.GetFileName(key.FileName);
+                filePathKey = NuevaRutaKey + Path.GetFileName(text.FileName);
+            }
+            Data.Instancia.lecturasRSA(filePathText, filePathKey, 2);
             return View();
         }
 

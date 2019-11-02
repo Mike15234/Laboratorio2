@@ -284,7 +284,7 @@ namespace Laboratorio2_EDD2.Helpers
 
         }
 
-        public void lecturasRSA(string rutallave, string rutatexto)
+        public void lecturasRSA(string rutallave, string rutatexto, int cif)
         {
             RSAprocess rsa = new RSAprocess();
             var byteBufferKey = new byte[bufferLength];
@@ -320,12 +320,41 @@ namespace Laboratorio2_EDD2.Helpers
             }
 
             byte[] nuevoCifrado = new byte[byteBufferText.Length];
-
-            for (var i = 0;  i < byteBufferText.Length; i++)
+            string ruta = string.Empty;
+            string[] path = rutatexto.Split('.');
+            if (cif == 1)
             {
-                nuevoCifrado[i]=rsa.CifrandoRSA(byteBufferText[i], Convert.ToUInt64(llaves[1]), Convert.ToUInt64(llaves[0]));
+                ruta = path[0] + ".rsacif";
+                for (var i = 0; i < byteBufferText.Length; i++)
+                {
+                    nuevoCifrado[i] = rsa.CifrandoRSA(byteBufferText[i], Convert.ToUInt64(llaves[1]), Convert.ToUInt64(llaves[0]));
+                }
+            }
+            else if (cif == 2)
+            {
+                ruta = path[0] + "descif.txt";
+                for (var i = 0; i < byteBufferText.Length; i++)
+                {
+                    nuevoCifrado[i] = rsa.DescifradoRSA(byteBufferText[i], Convert.ToUInt64(llaves[1]), Convert.ToUInt64(llaves[0]));
+                }
             }
             
+            
+            
+
+            using (var writeStream1 = new FileStream(ruta, FileMode.OpenOrCreate))
+            {
+                using (var writer = new BinaryWriter(writeStream1))
+                {
+                    foreach (var item in nuevoCifrado)
+                    {
+                        writer.Write(item);
+                    }
+                    writer.Close();
+                }
+                writeStream1.Close();
+
+            }
 
         }
     }
