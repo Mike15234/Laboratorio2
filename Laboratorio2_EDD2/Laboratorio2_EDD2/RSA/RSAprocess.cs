@@ -92,8 +92,8 @@ namespace Laboratorio2_EDD2.RSA
                 }
             }
             
-            string privada = N.ToString() + "," + d.ToString();
-            string publica = N.ToString() + "," + e.ToString();
+            string privada = d.ToString() + ","+ N.ToString() ;
+            string publica = e.ToString() + "," + N.ToString();
             byte[] bytesprivada = System.Text.Encoding.ASCII.GetBytes(privada);
             byte[] bytespublica = System.Text.Encoding.ASCII.GetBytes(publica);
             

@@ -323,7 +323,7 @@ namespace Laboratorio2_EDD2.Helpers
                 ruta = path[0] + ".rsacif";
                 for (int i = 0; i < byteBufferText.Length; i++)
                 {
-                    var byteInicial = rsa.CifrandoRSA(byteBufferText[i], Convert.ToInt32(llaves[1]), Convert.ToInt32(llaves[0]));
+                    var byteInicial = rsa.CifrandoRSA(byteBufferText[i], Convert.ToInt32(llaves[0]), Convert.ToInt32(llaves[1]));
                     nuevoCifrado.Add(Convert.ToByte(rsa.CifrandoRSACantByte(byteInicial)));
                     nuevoCifrado.Add(Convert.ToByte(byteInicial % 256));
                 }
@@ -336,7 +336,7 @@ namespace Laboratorio2_EDD2.Helpers
                     var cantidadBytes = Convert.ToInt32(byteBufferText[i]) * 256;
                     var resto = Convert.ToInt32(byteBufferText[i + 1]);
                     var numDescifrar = cantidadBytes + resto;
-                    nuevoCifrado.Add(Convert.ToByte(rsa.DescifrandoRSA(numDescifrar, Convert.ToInt32(llaves[1]), Convert.ToInt32(llaves[0]))));
+                    nuevoCifrado.Add(Convert.ToByte(rsa.DescifrandoRSA(numDescifrar, Convert.ToInt32(llaves[0]), Convert.ToInt32(llaves[1]))));
                 }
             }
 
